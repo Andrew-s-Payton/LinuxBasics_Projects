@@ -4,19 +4,21 @@
 
 # First print off all configuration files and number them 
 
-echo "Enter the configuration file you want to modify:"
+echo "Enter the configuration file and path you want to modify:"
 read tempFile
 
-# Finds all configuration and lua files, 2>/dev/null meaning void all error messages and save it in a new location
-tempConf=$(find /etc -type f -name "*lua*" 2>/dev/null)
-tempConf=$(find /etc -type f -name "*conf*" 2>/dev/null)
-
 if [[ -z "$tempFile" ]]; then
-	echo "$tempConf" | nl
-	echo "Enter number of file:"
-	read -r tempNum
-	echo $tempNum
-	tail -n+$tempNum $tempConf | head -n 1
+	tempFile=/etc/snort/snort.lua
 fi
 
-echo $tempFile
+echo "First ten lines:
+!--------------------!"
+head $tempFile
+echo "
+Last ten lines:
+!--------------------!"
+tail $tempFile
+
+nl $tempFile | grep output
+
+sed s/output/Output/g $tempFile > projectBin/2-2_confFiles.txt 
